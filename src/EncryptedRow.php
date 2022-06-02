@@ -537,6 +537,48 @@ class EncryptedRow
     }
 
     /**
+     * Get all of the blind indexes and compound indexes calculated from the
+     * input array, as defined for this object.
+     *
+     * @param array $row
+     * @return array<string, array<string, string>|string>
+     *
+     * @throws ArrayKeyException
+     * @throws Exception\CryptoOperationException
+     * @throws SodiumException
+     */
+    public function getBlindIndexesFromInput(array $row): array
+    {
+        /** @var array<string, array<string, string>|string> $return */
+        $return = [];
+        foreach ($this->blindIndexes as $column => $blindIndexes) {
+            if (!\array_key_exists($column, $row)) {
+                continue;
+            }
+            /** @var BlindIndex $blindIndex */
+            foreach ($blindIndexes as $blindIndex) {
+                $return[$blindIndex->getName()] = $this->calcBlindIndex(
+                    $row,
+                    $column,
+                    $blindIndex
+                );
+            }
+        }
+        /**
+         * @var string $name
+         * @var CompoundIndex $compoundIndex
+         */
+        foreach ($this->compoundIndexes as $name => $compoundIndex) {
+            $compound = $this->calcCompoundIndex($row, $compoundIndex);
+            if (!$compound || $compound === '[]' || $compound === '{}') {
+                continue;
+            }
+            $return[$name] = $compound;
+        }
+        return $return;
+    }
+
+    /**
      * @param string $column
      * @return array<string, BlindIndex>
      */
