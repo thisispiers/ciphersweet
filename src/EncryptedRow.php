@@ -35,9 +35,9 @@ class EncryptedRow
     protected CipherSweet $engine;
 
     /**
-     * @var array<string, string> $fieldsToEncrypt
+     * @var array<string, array{type: string, requiredWhenDecryptingRow: bool, requiredWhenEncryptingRow: bool}> $fieldsToEncrypt
      */
-    protected array $fieldsToEncrypt = [];
+    public array $fieldsToEncrypt = [];
 
     /**
      * @var array<string, JsonFieldMap> $jsonMaps
@@ -103,14 +103,22 @@ class EncryptedRow
      * @param string $fieldName
      * @param string $type
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
     public function addField(
         string $fieldName,
         string $type = Constants::TYPE_TEXT,
-        string $aadSource = ''
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true,
     ): static {
-        $this->fieldsToEncrypt[$fieldName] = $type;
+        $this->fieldsToEncrypt[$fieldName] = [
+            'type' => $type,
+            'requiredWhenDecryptingRow' => $requiredWhenDecryptingRow,
+            'requiredWhenEncryptingRow' => $requiredWhenEncryptingRow,
+        ];
         if ($aadSource) {
             $this->aadSourceField[$fieldName] = $aadSource;
         }
@@ -122,11 +130,23 @@ class EncryptedRow
      *
      * @param string $fieldName
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
-    public function addBooleanField(string $fieldName, string $aadSource = ''): static
-    {
-        return $this->addField($fieldName, Constants::TYPE_BOOLEAN, $aadSource);
+    public function addBooleanField(
+        string $fieldName,
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
+    ): static {
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_BOOLEAN,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -134,11 +154,23 @@ class EncryptedRow
      *
      * @param string $fieldName
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
-    public function addFloatField(string $fieldName, string $aadSource = ''): static
-    {
-        return $this->addField($fieldName, Constants::TYPE_FLOAT, $aadSource);
+    public function addFloatField(
+        string $fieldName,
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
+    ): static {
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_FLOAT,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -146,11 +178,23 @@ class EncryptedRow
      *
      * @param string $fieldName
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
-    public function addIntegerField(string $fieldName, string $aadSource = ''): static
-    {
-        return $this->addField($fieldName, Constants::TYPE_INT, $aadSource);
+    public function addIntegerField(
+        string $fieldName,
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
+    ): static {
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_INT,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -158,11 +202,23 @@ class EncryptedRow
      *
      * @param string $fieldName
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
-    public function addOptionalBooleanField(string $fieldName, string $aadSource = ''): static
-    {
-        return $this->addField($fieldName, Constants::TYPE_OPTIONAL_BOOLEAN, $aadSource);
+    public function addOptionalBooleanField(
+        string $fieldName,
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
+    ): static {
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_OPTIONAL_BOOLEAN,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -170,11 +226,23 @@ class EncryptedRow
      *
      * @param string $fieldName
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
-    public function addOptionalFloatField(string $fieldName, string $aadSource = ''): static
-    {
-        return $this->addField($fieldName, Constants::TYPE_OPTIONAL_FLOAT, $aadSource);
+    public function addOptionalFloatField(
+        string $fieldName,
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
+    ): static {
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_OPTIONAL_FLOAT,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -182,11 +250,23 @@ class EncryptedRow
      *
      * @param string $fieldName
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
-    public function addOptionalIntegerField(string $fieldName, string $aadSource = ''): static
-    {
-        return $this->addField($fieldName, Constants::TYPE_OPTIONAL_INT, $aadSource);
+    public function addOptionalIntegerField(
+        string $fieldName,
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
+    ): static {
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_OPTIONAL_INT,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -194,11 +274,23 @@ class EncryptedRow
      *
      * @param string $fieldName
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
-    public function addOptionalTextField(string $fieldName, string $aadSource = ''): static
-    {
-        return $this->addField($fieldName, Constants::TYPE_OPTIONAL_TEXT, $aadSource);
+    public function addOptionalTextField(
+        string $fieldName,
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
+    ): static {
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_OPTIONAL_TEXT,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -228,17 +320,27 @@ class EncryptedRow
      * @param JsonFieldMap $fieldMap
      * @param string $aadSource Field name to source AAD from
      * @param bool $strict
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
     public function addJsonField(
         string $fieldName,
         JsonFieldMap $fieldMap,
         string $aadSource = '',
-        bool $strict = true
+        bool $strict = true,
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         $this->jsonMaps[$fieldName] = $fieldMap;
         $this->jsonStrict[$fieldName] = $strict;
-        return $this->addField($fieldName, Constants::TYPE_JSON, $aadSource);
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_JSON,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -246,11 +348,23 @@ class EncryptedRow
      *
      * @param string $fieldName
      * @param string $aadSource Field name to source AAD from
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
-    public function addTextField(string $fieldName, string $aadSource = ''): static
-    {
-        return $this->addField($fieldName, Constants::TYPE_TEXT, $aadSource);
+    public function addTextField(
+        string $fieldName,
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
+    ): static {
+        return $this->addField(
+            $fieldName,
+            Constants::TYPE_TEXT,
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
+        );
     }
 
     /**
@@ -471,7 +585,7 @@ class EncryptedRow
         if (!\array_key_exists($name, $this->fieldsToEncrypt)) {
             throw new CipherSweetException("Field does not exist: {$name}");
         }
-        if ($this->fieldsToEncrypt[$name] !== Constants::TYPE_JSON) {
+        if ($this->fieldsToEncrypt[$name]['type'] !== Constants::TYPE_JSON) {
             throw new CipherSweetException("Field {$name} is not a JSON field");
         }
         if (!\array_key_exists($name, $this->jsonMaps)) {
@@ -507,7 +621,19 @@ class EncryptedRow
             $tenant = $this->engine->getTenantFromRow($row, $this->tableName);
             $this->engine->setActiveTenant($tenant);
         }
-        foreach ($this->fieldsToEncrypt as $field => $type) {
+        foreach ($this->fieldsToEncrypt as $field => $fieldOptions) {
+            $type = $fieldOptions['type'];
+            if (!$fieldOptions['requiredWhenDecryptingRow']) {
+                if (
+                    !\array_key_exists($field, $row)
+                    || (
+                        $type !== Constants::TYPE_JSON
+                        && !$backend->isHeaderValid($row[$field])
+                    )
+                ) {
+                    continue;
+                }
+            }
             $key = $this->engine->getFieldSymmetricKey(
                 $this->tableName,
                 $field
@@ -577,13 +703,18 @@ class EncryptedRow
         /** @var array<string, string|int|float|bool|null|scalar[]> $return */
         $return = $row;
         $backend = $this->engine->getBackend();
-        foreach ($this->fieldsToEncrypt as $field => $type) {
+        foreach ($this->fieldsToEncrypt as $field => $fieldOptions) {
+            $type = $fieldOptions['type'];
             if (!array_key_exists($field, $row)) {
-                throw new ArrayKeyException(
-                    'Expected value for column ' .
-                        $field .
-                    ' on array, nothing given.'
-                );
+                if (!$fieldOptions['requiredWhenEncryptingRow']) {
+                    continue;
+                } else {
+                    throw new ArrayKeyException(
+                        'Expected value for column ' .
+                            $field .
+                        ' on array, nothing given.'
+                    );
+                }
             }
             $key = $this->engine->getFieldSymmetricKey(
                 $this->tableName,
@@ -831,7 +962,7 @@ class EncryptedRow
             );
         }
         /** @var string $fieldType */
-        $fieldType = $this->fieldsToEncrypt[$column];
+        $fieldType = $this->fieldsToEncrypt[$column]['type'];
 
         /** @var string|bool|int|float|null $unconverted */
         $unconverted = $row[$column];

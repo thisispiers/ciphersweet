@@ -261,6 +261,8 @@ class EncryptedRowTest extends TestCase
             'hivstatus' => true
         ];
         $eF = $this->getExampleRow($this->fipsEngine, true);
+
+        $eF->setFlatIndexes(true);
         $indexes = $eF->getAllBlindIndexes($row);
         $this->assertEquals('a88e74ada916ab9b', $indexes['contact_ssn_last_four']);
         $this->assertEquals('9c3d53214ab71d7f', $indexes['contact_ssnlast4_hivstatus']);
@@ -540,5 +542,60 @@ class EncryptedRowTest extends TestCase
         $null['testing'] = null;
         $encrypted = $eR->encryptRow($null);
         $this->assertNotSame($null, $encrypted);
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws CryptoOperationException
+     * @throws \SodiumException
+     */
+    public function testRequiredWhenEncryptingRow()
+    {
+        $eF = (new EncryptedRow($this->fipsRandom, 'contacts'));
+        $requiredWhenDecryptingRow = false;
+        $requiredWhenEncryptingRow = false;
+        $eF->addTextField('foo', '', $requiredWhenDecryptingRow, $requiredWhenEncryptingRow);
+
+        $message = 'This is a test message: ' . \random_bytes(16);
+        $row     = [
+            'bar' => $message
+        ];
+
+        $fCipher = $eF->encryptRow($row);
+
+        $this->assertArrayNotHasKey('foo', $row);
+        $this->assertNotSame(
+            FIPSCrypto::MAGIC_HEADER,
+            Binary::safeSubstr($row['bar'], 0, 5)
+        );
+
+        $this->assertSame($row, $eF->decryptRow($row));
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws CryptoOperationException
+     * @throws \SodiumException
+     */
+    public function testRequiredWhenDecryptingRow()
+    {
+        $eF = (new EncryptedRow($this->fipsRandom, 'contacts'));
+        $requiredWhenDecryptingRow = false;
+        $requiredWhenEncryptingRow = false;
+        $eF->addTextField('message', '', $requiredWhenDecryptingRow, $requiredWhenEncryptingRow);
+
+        $message = 'This is an unencrypted test message: ' . \random_bytes(16);
+        $row     = [
+            'message' => $message
+        ];
+
+        // not encrypted
+
+        $this->assertNotSame(
+            FIPSCrypto::MAGIC_HEADER,
+            Binary::safeSubstr($row['message'], 0, 5)
+        );
+
+        $this->assertSame($row, $eF->decryptRow($row));
     }
 }

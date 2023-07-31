@@ -123,6 +123,14 @@ class EncryptedFieldTest extends TestCase
                 $this->assertInstanceOf('SodiumException', $ex);
             }
         }
+
+        $requiredWhenDecryptingRow = false;
+        $requiredWhenEncryptingRow = false;
+        $eF = new EncryptedField($this->fipsRandom, 'contacts', 'ssn', false, $requiredWhenDecryptingRow, $requiredWhenEncryptingRow);
+        $this->assertSame('', $eF->encryptValue(''));
+
+        $message = 'This is a test message: ' . \random_bytes(16);
+        $this->assertSame($message, $eF->decryptValue($message));
     }
 
     /**

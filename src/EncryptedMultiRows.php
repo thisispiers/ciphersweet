@@ -72,10 +72,18 @@ class EncryptedMultiRows
         string $tableName,
         string $fieldName,
         string $type = Constants::TYPE_TEXT,
-        string $aadSource = ''
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         $this->getEncryptedRowObjectForTable($tableName)
-            ->addField($fieldName, $type, $aadSource);
+            ->addField(
+                $fieldName,
+                $type,
+                $aadSource,
+                $requiredWhenDecryptingRow,
+                $requiredWhenEncryptingRow
+            );
         return $this;
     }
 
@@ -87,13 +95,17 @@ class EncryptedMultiRows
     public function addBooleanField(
         string $tableName,
         string $fieldName,
-        string $aadSource = ''
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
             $tableName,
             $fieldName,
             Constants::TYPE_BOOLEAN,
-            $aadSource
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
         );
     }
 
@@ -105,13 +117,17 @@ class EncryptedMultiRows
     public function addFloatField(
         string $tableName,
         string $fieldName,
-        string $aadSource = ''
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
             $tableName,
             $fieldName,
             Constants::TYPE_FLOAT,
-            $aadSource
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
         );
     }
 
@@ -123,13 +139,17 @@ class EncryptedMultiRows
     public function addIntegerField(
         string $tableName,
         string $fieldName,
-        string $aadSource = ''
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
             $tableName,
             $fieldName,
             Constants::TYPE_INT,
-            $aadSource
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
         );
     }
 
@@ -143,10 +163,19 @@ class EncryptedMultiRows
         string $fieldName,
         JsonFieldMap $fieldMap,
         string $aadSource = '',
-        bool $strict = true
+        bool $strict = true,
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         $this->getEncryptedRowObjectForTable($tableName)
-            ->addJsonField($fieldName, $fieldMap, $aadSource, $strict);
+            ->addJsonField(
+                $fieldName,
+                $fieldMap,
+                $aadSource,
+                $strict,
+                $requiredWhenDecryptingRow,
+                $requiredWhenEncryptingRow
+            );
         return $this;
     }
 
@@ -158,13 +187,17 @@ class EncryptedMultiRows
     public function addTextField(
         string $tableName,
         string $fieldName,
-        string $aadSource = ''
+        string $aadSource = '',
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
             $tableName,
             $fieldName,
             Constants::TYPE_TEXT,
-            $aadSource
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
         );
     }
 
