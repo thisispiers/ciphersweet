@@ -158,11 +158,11 @@ class EncryptedRow
         bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_BOOLEAN,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_BOOLEAN,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 
@@ -182,11 +182,11 @@ class EncryptedRow
         bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_FLOAT,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_FLOAT,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 
@@ -206,11 +206,11 @@ class EncryptedRow
         bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_INT,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_INT,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 
@@ -230,11 +230,11 @@ class EncryptedRow
         bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_OPTIONAL_BOOLEAN,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_OPTIONAL_BOOLEAN,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 
@@ -254,11 +254,11 @@ class EncryptedRow
         bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_OPTIONAL_FLOAT,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_OPTIONAL_FLOAT,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 
@@ -278,11 +278,11 @@ class EncryptedRow
         bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_OPTIONAL_INT,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_OPTIONAL_INT,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 
@@ -302,11 +302,11 @@ class EncryptedRow
         bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_OPTIONAL_TEXT,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_OPTIONAL_TEXT,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 
@@ -317,17 +317,27 @@ class EncryptedRow
      * @param JsonFieldMap $fieldMap
      * @param string|AAD $aadSource Field name to source AAD from
      * @param bool $strict
+     * @param bool $requiredWhenDecryptingRow
+     * @param bool $requiredWhenEncryptingRow
      * @return static
      */
     public function addNullableJsonField(
         string $fieldName,
         JsonFieldMap $fieldMap,
         string|AAD $aadSource = '',
-        bool $strict = true
+        bool $strict = true,
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         $this->jsonMaps[$fieldName] = $fieldMap;
         $this->jsonStrict[$fieldName] = $strict;
-        return $this->addField($fieldName, Constants::TYPE_OPTIONAL_JSON, $aadSource);
+        return $this->addField(
+            fieldName: $fieldName,
+            type: Constants::TYPE_OPTIONAL_JSON,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
+        );
     }
 
     /**
@@ -352,11 +362,11 @@ class EncryptedRow
         $this->jsonMaps[$fieldName] = $fieldMap;
         $this->jsonStrict[$fieldName] = $strict;
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_JSON,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_JSON,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 
@@ -376,11 +386,11 @@ class EncryptedRow
         bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
-            $fieldName,
-            Constants::TYPE_TEXT,
-            $aadSource,
-            $requiredWhenDecryptingRow,
-            $requiredWhenEncryptingRow
+            fieldName: $fieldName,
+            type: Constants::TYPE_TEXT,
+            aadSource: $aadSource,
+            requiredWhenDecryptingRow: $requiredWhenDecryptingRow,
+            requiredWhenEncryptingRow: $requiredWhenEncryptingRow,
         );
     }
 

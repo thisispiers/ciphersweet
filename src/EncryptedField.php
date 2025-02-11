@@ -143,7 +143,7 @@ class EncryptedField
         #[\SensitiveParameter]
         string|AAD $aad = ''
     ): string {
-        if (!$this->requiredWhenEncrypting || !$plaintext) {
+        if (!$this->requiredWhenEncrypting && !$plaintext) {
             return $plaintext;
         }
 
@@ -167,7 +167,7 @@ class EncryptedField
         string|AAD $aad = ''
     ): string {
         $backend = $this->engine->getBackend();
-        if (!$this->requiredWhenDecrypting || !$backend->isHeaderValid($ciphertext)) {
+        if (!$this->requiredWhenDecrypting && !$backend->isHeaderValid($ciphertext)) {
             return $ciphertext;
         }
 
