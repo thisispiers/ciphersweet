@@ -471,4 +471,14 @@ class ModernCrypto implements BackendInterface
     {
         return (string) static::MAGIC_HEADER;
     }
+
+    /**
+     * @param mixed $ciphertext
+     * @return bool
+     */
+    public function isHeaderValid(mixed $ciphertext): bool
+    {
+        $header = Binary::safeSubstr((string) $ciphertext, 0, 5);
+        return SodiumUtil::hashEquals($header, self::MAGIC_HEADER);
+    }
 }

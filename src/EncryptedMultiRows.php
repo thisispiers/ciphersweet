@@ -82,6 +82,8 @@ class EncryptedMultiRows
         string $fieldName,
         string $type = Constants::TYPE_TEXT,
         string|AAD $aadSource = ''
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         if ($this->autoBindContext) {
             // We automatically bind every field to the table and column name
@@ -92,7 +94,13 @@ class EncryptedMultiRows
                 ->merge(AAD::literal('table=' . $tableName . ';field=' . $fieldName));
         }
         $this->getEncryptedRowObjectForTable($tableName)
-            ->addField($fieldName, $type, $aadSource, $this->autoBindContext);
+            ->addField(
+                $fieldName,
+                $type,
+                $aadSource,
+                $requiredWhenDecryptingRow,
+                $requiredWhenEncryptingRow
+            );
         return $this;
     }
 
@@ -105,12 +113,16 @@ class EncryptedMultiRows
         string $tableName,
         string $fieldName,
         string|AAD $aadSource = ''
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
             $tableName,
             $fieldName,
             Constants::TYPE_BOOLEAN,
-            $aadSource
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
         );
     }
 
@@ -123,12 +135,16 @@ class EncryptedMultiRows
         string $tableName,
         string $fieldName,
         string|AAD $aadSource = ''
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
             $tableName,
             $fieldName,
             Constants::TYPE_FLOAT,
-            $aadSource
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
         );
     }
 
@@ -141,12 +157,16 @@ class EncryptedMultiRows
         string $tableName,
         string $fieldName,
         string|AAD $aadSource = ''
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
             $tableName,
             $fieldName,
             Constants::TYPE_INT,
-            $aadSource
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
         );
     }
 
@@ -160,10 +180,19 @@ class EncryptedMultiRows
         string $fieldName,
         JsonFieldMap $fieldMap,
         string|AAD $aadSource = '',
-        bool $strict = true
+        bool $strict = true,
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         $this->getEncryptedRowObjectForTable($tableName)
-            ->addJsonField($fieldName, $fieldMap, $aadSource, $strict);
+            ->addJsonField(
+                $fieldName,
+                $fieldMap,
+                $aadSource,
+                $strict,
+                $requiredWhenDecryptingRow,
+                $requiredWhenEncryptingRow
+            );
         return $this;
     }
 
@@ -176,12 +205,16 @@ class EncryptedMultiRows
         string $tableName,
         string $fieldName,
         string|AAD $aadSource = ''
+        bool $requiredWhenDecryptingRow = true,
+        bool $requiredWhenEncryptingRow = true
     ): static {
         return $this->addField(
             $tableName,
             $fieldName,
             Constants::TYPE_TEXT,
-            $aadSource
+            $aadSource,
+            $requiredWhenDecryptingRow,
+            $requiredWhenEncryptingRow
         );
     }
 

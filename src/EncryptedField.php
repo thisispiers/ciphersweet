@@ -40,6 +40,16 @@ class EncryptedField
     protected bool $typedIndexes = false;
 
     /**
+     * @var bool $requiredWhenDecrypting
+     */
+    protected bool $requiredWhenDecrypting = true;
+
+    /**
+     * @var bool $requiredWhenEncrypting
+     */
+    protected bool $requiredWhenEncrypting = true;
+
+    /**
      * @var SymmetricKey $key
      */
     protected SymmetricKey $key;
@@ -61,7 +71,9 @@ class EncryptedField
         string $tableName = '',
         #[\SensitiveParameter]
         string $fieldName = '',
-        bool $useTypedIndexes = false
+        bool $useTypedIndexes = false,
+        bool $requiredWhenDecrypting = true,
+        bool $requiredWhenEncrypting = true
     ) {
         $this->engine = $engine;
         $this->tableName = $tableName;
@@ -71,6 +83,8 @@ class EncryptedField
             $this->fieldName
         );
         $this->typedIndexes = $useTypedIndexes;
+        $this->requiredWhenDecrypting = $requiredWhenDecrypting;
+        $this->requiredWhenEncrypting = $requiredWhenEncrypting;
     }
 
     /**
@@ -129,6 +143,10 @@ class EncryptedField
         #[\SensitiveParameter]
         string|AAD $aad = ''
     ): string {
+        if (!$this->requiredWhenEncrypting || !$plaintext) {
+            return $plaintext;
+        }
+
         return $this
             ->engine
             ->getBackend()
@@ -148,10 +166,12 @@ class EncryptedField
         #[\SensitiveParameter]
         string|AAD $aad = ''
     ): string {
-        return $this
-            ->engine
-            ->getBackend()
-            ->decrypt(
+        $backend = $this->engine->getBackend();
+        if (!$this->requiredWhenDecrypting || !$backend->isHeaderValid($ciphertext)) {
+            return $ciphertext;
+        }
+
+        return $backend->decrypt(
                 $ciphertext,
                 $this->key,
                 AAD::literal($aad)->canonicalize()

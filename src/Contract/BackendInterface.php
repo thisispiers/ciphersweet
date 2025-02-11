@@ -110,4 +110,9 @@ interface BackendInterface
      * @return string
      */
     public function getPrefix(): string;
+
+    /**
+     * @return bool
+     */
+    public function isHeaderValid(mixed $ciphertext): bool;
 }

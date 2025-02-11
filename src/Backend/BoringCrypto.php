@@ -127,8 +127,7 @@ class BoringCrypto implements BackendInterface, MultiTenantSafeBackendInterface
         string $aad = ''
     ): string {
         // Make sure we're using the correct version:
-        $header = Binary::safeSubstr($ciphertext, 0, 5);
-        if (!Util::hashEquals($header, self::MAGIC_HEADER)) {
+        if (!$this->isHeaderValid($ciphertext)) {
             throw new InvalidCiphertextException('Invalid ciphertext header.');
         }
 
@@ -504,5 +503,15 @@ class BoringCrypto implements BackendInterface, MultiTenantSafeBackendInterface
     public function getPrefix(): string
     {
         return (string) static::MAGIC_HEADER;
+    }
+
+    /**
+     * @param mixed $ciphertext
+     * @return bool
+     */
+    public function isHeaderValid(mixed $ciphertext): bool
+    {
+        $header = Binary::safeSubstr((string) $ciphertext, 0, 5);
+        return SodiumUtil::hashEquals($header, self::MAGIC_HEADER);
     }
 }
